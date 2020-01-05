@@ -1,0 +1,5 @@
+floppya: 1_44=game.bin, status=inserted
+boot: floppy
+display_library: x, options="gui_debug"
+megs: 1
+magic_break: enabled=1

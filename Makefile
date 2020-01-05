@@ -17,3 +17,9 @@ game.bin: game.elf
 
 run: game.bin
 	qemu-system-i386 -fda game.bin
+
+bochs: game.bin
+	bochs -f bochsrc
+
+objdump: game.elf
+	objdump -D -mi386 -Maddr16,data16 game.elf
