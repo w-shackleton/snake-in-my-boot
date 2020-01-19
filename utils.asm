@@ -36,9 +36,9 @@ sleep:
     mov ah, 0x86
     ; cx - high word
     ; dx - low word
-    ; 300,000 = 0x493E0
-    mov cx, 0x4
-    mov dx, 0x93E0
+    ; 150,000 = 0x249F0. Approximate and zero-out dx
+    mov cx, 0x2
+    xor dx, dx
     int 15h
     popad
     retf

@@ -1,10 +1,14 @@
 #include <stdint.h>
 #include "utils.h"
 
-#define SNAKE_SIZE 100
-
 #define X_LIMIT 32
 #define Y_LIMIT 20
+
+#define SNAKE_SIZE (X_LIMIT * Y_LIMIT)
+
+// bitwise opposites
+#define GAME_AREA_MASK 0x0F1F
+#define GAME_AREA_DEAD 0xF0E0
 
 // Whack everything in bss by setting it all to zero. Each value is
 // x + 0x100*y
@@ -54,7 +58,10 @@ void main() {
         short new_head = snake[0] + motion;
 
         // Grow if snake eats food
-        length += new_head == food;
+        if (new_head == food) {
+            length++;
+            food = (food * 25173 + 13849) & GAME_AREA_MASK;
+        }
         
         // Advance the snake
         for (int i = length; i; i--) {
@@ -72,7 +79,7 @@ void main() {
 
         // Screen is 32x16 cells. Bounds-check this with bitwise logic.
         // TODO: make game area be 32x20, not 32x16
-        if (snake[0] & 0xF0E0) {
+        if (snake[0] & GAME_AREA_DEAD) {
             shutdown();
         }
 
