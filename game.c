@@ -13,7 +13,7 @@
 // Whack everything in bss by setting it all to zero. Each value is
 // x + 0x100*y
 int snake[SNAKE_SIZE + 1] = {0};
-short food = 0x0402;
+short food = 0;
 int length = 0;
 
 // w = 0x77 0111 0111
