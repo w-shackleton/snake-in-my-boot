@@ -99,10 +99,15 @@ cls:
     pushad
     mov ax, VGA_SEGMENT
     mov es, ax ; set es segment
-    mov cx, 320 * 200
-    mov di, 0
-    mov al, 0
+
+    ; set game area to grey
+    mov cx, 320 * 160
+    xor di, di
+    mov al, 0x14
     rep stosb
+
+    ; We rely on the buffer starting black to keep the non-game area black.
+
     xor ax, ax
     mov es, ax ; reset es segment
     popad

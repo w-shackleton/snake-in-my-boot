@@ -2,7 +2,7 @@
 #include "utils.h"
 
 #define X_LIMIT 32
-#define Y_LIMIT 20
+#define Y_LIMIT 16
 
 #define SNAKE_SIZE (X_LIMIT * Y_LIMIT)
 
