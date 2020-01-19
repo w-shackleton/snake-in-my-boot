@@ -17,9 +17,4 @@ void draw_cell(int xy, char colour);
  */
 void cls();
 
-/**
- * Invokes the Bochs breakpoint
- */
-void brk();
-
 void shutdown();

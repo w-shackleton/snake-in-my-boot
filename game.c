@@ -36,9 +36,6 @@ const short scan_table[] = {
     -0x100,
 };
 
-void repaint();
-void print();
-
 void main() {
     length = 6;
 
@@ -78,22 +75,18 @@ void main() {
         snake[0] += motion;
 
         // Screen is 32x16 cells. Bounds-check this with bitwise logic.
-        // TODO: make game area be 32x20, not 32x16
         if (snake[0] & GAME_AREA_DEAD) {
             shutdown();
         }
 
-        repaint();
+        cls();
+
+        draw_cell(food, 0x9);
+
+        for (int i = 0; i < length; i++) {
+            draw_cell(snake[i], 0xF);
+        }
+
         sleep();
-    }
-}
-
-void repaint() {
-    cls();
-
-    draw_cell(food, 0x9);
-
-    for (int i = 0; i < length; i++) {
-        draw_cell(snake[i], 0xF);
     }
 }
