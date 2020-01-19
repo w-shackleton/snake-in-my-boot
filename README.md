@@ -5,6 +5,10 @@ fits into an MBR bootloader.
 
 ![A screenshot of the game running in QEMU](https://raw.githubusercontent.com/w-shackleton/snake-in-my-boot/master/demo.png)
 
+## Play
+
+Run `make run` to start the game in QEMU.
+
 ## Design
 
 *Check `References` for guides I used to write this*
