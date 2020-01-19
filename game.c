@@ -11,25 +11,41 @@
 int snake[SNAKE_SIZE + 1] = {0};
 int length = 0;
 
+// w = 0x77 0111 0111
+// a = 0x61 0110 0001
+// s = 0x73 0111 0011
+// d = 0x64 0110 0100
+//                ^^
+//
+// We look at bits 1 and 2 to determine the direction of travel.
+const short scan_table[] = {
+    // 00 = a - left
+    -1,
+    // 01 = s - down
+    0x100,
+    // 10 = d - right
+    1,
+    // 11 = w - up
+    -0x100,
+};
+
 void repaint();
 void print();
 
 void main() {
     length = 6;
 
-    char direction = 0;
+    // snake starts motionless.
+    short motion = 0;
 
     while (1) {
         char key = getkey();
-        switch (key) {
-            case 'w':
-            case 'a':
-            case 's':
-            case 'd':
-                direction = key;
-                break;
-            default:
-                break;
+        if (key) {
+            // Extract bits 1 and 2 and lookup motion in table above. We do no
+            // validation of the key so other keys will go in random directions
+            // but oh well
+            char idx = (key >> 1) & 0x03;
+            motion = scan_table[idx];
         }
         
         // Advance the snake
@@ -37,20 +53,7 @@ void main() {
             snake[i] = snake[i - 1];
         }
 
-        switch (direction) {
-            case 'w':
-                snake[0] -= 0x100;
-                break;
-            case 'a':
-                snake[0]--;
-                break;
-            case 's':
-                snake[0] += 0x100;
-                break;
-            case 'd':
-                snake[0]++;
-                break;
-        }
+        snake[0] += motion;
 
         repaint();
         sleep();
