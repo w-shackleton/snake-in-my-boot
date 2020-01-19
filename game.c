@@ -17,7 +17,9 @@ int length = 0;
 // d = 0x64 0110 0100
 //                ^^
 //
-// We look at bits 1 and 2 to determine the direction of travel.
+// We look at bits 1 and 2 to determine the direction of travel. Since the
+// direction is stored in two bytes we can calculate both directions in a
+// single addition.
 const short scan_table[] = {
     // 00 = a - left
     -1,
