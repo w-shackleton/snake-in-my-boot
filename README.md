@@ -20,7 +20,7 @@ require either interrupts or segments which GCC can't natively perform.
 
 I didn't want to.
 
-## Why not write everything in C?
+## Why not write everything in asm?
 
 I wanted to learn about how C interacts with assembly, how they are linked
 together, and what bare-metal C looks like in x86.
