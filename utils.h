@@ -8,9 +8,9 @@ int getkey();
 void sleep();
 
 /**
- * Draws a 10x10px cell to the screen.
+ * Draws a 10x10px cell to the screen. xy is x + 0x100*y.
  */
-void draw_cell(char x, char y, char colour);
+void draw_cell(int xy, char colour);
 
 /**
  * Clears the screen

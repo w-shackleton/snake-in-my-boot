@@ -64,7 +64,7 @@ void repaint() {
     cls();
 
     for (int i = 0; i < length; i++) {
-        draw_cell(snake_x[i], snake_y[i], 0xF);
+        draw_cell(snake_x[i] + snake_y[i] * 0x100, 0xF);
     }
 }
 

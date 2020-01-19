@@ -6,6 +6,7 @@ global brk
 bits 16
 
 CELL_SIZE equ 10
+X_CELL_COUNT equ 32
 X_RESOLUTION equ 320
 VGA_SEGMENT equ 0xA000
 
@@ -46,13 +47,13 @@ sleep:
 
 draw_cell:
     ; set up stack
-    xchg bx, bx
+    ; xchg bx, bx - Bochs breakpoint
     pushad
     mov ebp, esp
 
-    ; normally x = ebp+8, y = ebp+12, colour = ebp+16 since stack has ret ptr +
+    ; normally xy = ebp+8, colour = ebp+12 since stack has ret ptr +
     ; ebp, but I'm using pushad to save bytes, so we have 8 dwords on stack +
-    ; ret ptr. So x = ebp+36, y = ebp+40 etc
+    ; ret ptr. So xy = ebp+36, colour = ebp+40 etc
 
     ; set es segment to VGA segment and keep this for the duration of this func
     mov eax, VGA_SEGMENT
@@ -65,13 +66,14 @@ draw_line:
     dec bx
 
     ; calculate initial VGA X offset into di
-    mov eax, [ds:ebp+36]     ; load X coord
+    mov eax, [ds:ebp+36]     ; load X coord into al, Y coord into ah
+    mov dl, ah               ; load Y coord into dl
     mov ecx, CELL_SIZE
-    mul cx             ; mul by 10
-    mov edi, eax         ; store in di
-    mov ax, [ds:ebp+40]    ; load Y coord
-    mov cx, CELL_SIZE
-    mul cx             ; mul by 10
+    mul cl                   ; mul X coord by 10, store in ax
+    mov edi, eax             ; store result in edi
+    mov al, dl               ; load Y coord into dl
+    ; mov cx, CELL_SIZE -- Don't need to do this, CELL_SIZE already in ecx
+    mul cl             ; mul by 10
     add ax, bx         ; add on current Y counter
     mov ecx, X_RESOLUTION
     mul cx             ; multiply by X resolution
@@ -79,7 +81,7 @@ draw_line:
 
     ; write a row of pixels of the given colour
     mov ecx, CELL_SIZE
-    mov al, [ds:ebp+44]
+    mov al, [ds:ebp+40]
     rep stosb
 
     cmp bx, 0
