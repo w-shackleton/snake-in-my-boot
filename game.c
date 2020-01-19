@@ -6,17 +6,15 @@
 #define X_LIMIT 32
 #define Y_LIMIT 20
 
-// Whack everything in bss by setting it all to zero
-char snake_x[SNAKE_SIZE + 1] = {0};
-char snake_y[SNAKE_SIZE + 1] = {0};
+// Whack everything in bss by setting it all to zero. Each value is
+// x + 0x100*y
+int snake[SNAKE_SIZE + 1] = {0};
 int length = 0;
 
 void repaint();
 void print();
 
 void main() {
-    snake_x[0] = 1;
-    snake_y[0] = 1;
     length = 6;
 
     char direction = 0;
@@ -36,22 +34,21 @@ void main() {
         
         // Advance the snake
         for (int i = length; i; i--) {
-            snake_x[i] = snake_x[i - 1];
-            snake_y[i] = snake_y[i - 1];
+            snake[i] = snake[i - 1];
         }
 
         switch (direction) {
             case 'w':
-                snake_y[0]--;
+                snake[0] -= 0x100;
                 break;
             case 'a':
-                snake_x[0]--;
+                snake[0]--;
                 break;
             case 's':
-                snake_y[0]++;
+                snake[0] += 0x100;
                 break;
             case 'd':
-                snake_x[0]++;
+                snake[0]++;
                 break;
         }
 
@@ -64,7 +61,7 @@ void repaint() {
     cls();
 
     for (int i = 0; i < length; i++) {
-        draw_cell(snake_x[i] + snake_y[i] * 0x100, 0xF);
+        draw_cell(snake[i], 0xF);
     }
 }
 
