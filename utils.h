@@ -21,3 +21,5 @@ void cls();
  * Invokes the Bochs breakpoint
  */
 void brk();
+
+void shutdown();

@@ -9,6 +9,7 @@
 // Whack everything in bss by setting it all to zero. Each value is
 // x + 0x100*y
 int snake[SNAKE_SIZE + 1] = {0};
+short food = 0x0402;
 int length = 0;
 
 // w = 0x77 0111 0111
@@ -37,8 +38,8 @@ void print();
 void main() {
     length = 6;
 
-    // snake starts motionless.
-    short motion = 0;
+    // snake starts going right.
+    short motion = 1;
 
     while (1) {
         char key = getkey();
@@ -49,13 +50,31 @@ void main() {
             char idx = (key >> 1) & 0x03;
             motion = scan_table[idx];
         }
+
+        short new_head = snake[0] + motion;
+
+        // Grow if snake eats food
+        length += new_head == food;
         
         // Advance the snake
         for (int i = length; i; i--) {
-            snake[i] = snake[i - 1];
+            short body_part = snake[i - 1];
+
+            // Die if snake eats itself
+            if (body_part == new_head) {
+                shutdown();
+            }
+
+            snake[i] = body_part;
         }
 
         snake[0] += motion;
+
+        // Screen is 32x16 cells. Bounds-check this with bitwise logic.
+        // TODO: make game area be 32x20, not 32x16
+        if (snake[0] & 0xF0E0) {
+            shutdown();
+        }
 
         repaint();
         sleep();
@@ -64,6 +83,8 @@ void main() {
 
 void repaint() {
     cls();
+
+    draw_cell(food, 0x9);
 
     for (int i = 0; i < length; i++) {
         draw_cell(snake[i], 0xF);

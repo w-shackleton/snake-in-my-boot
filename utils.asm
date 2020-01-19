@@ -2,7 +2,7 @@ global getkey
 global sleep
 global draw_cell
 global cls
-global brk
+global shutdown
 bits 16
 
 CELL_SIZE equ 10
@@ -107,3 +107,13 @@ cls:
     mov es, ax ; reset es segment
     popad
     retf
+
+
+shutdown:
+    mov ax, 0x5301 ; connect to real-mode APM services
+    xor bx, bx     ; device id 0 - APM BIOS
+    int 0x15       ; call APM
+    mov ax, 0x5307 ; set power state
+    mov bx, 0x0001 ; on all devices
+    mov cx, 0x0003 ; to Off
+    int 0x15       ; call APM
