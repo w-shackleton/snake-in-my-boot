@@ -6,7 +6,7 @@ boot.o: boot.asm
 utils.o: utils.asm
 	nasm -f elf32 utils.asm -o utils.o
 
-game.o: game.c
+game.o: game.c utils.h
 	gcc -fno-PIC -ffreestanding -fomit-frame-pointer -m16 -Os -c game.c -o game.o
 
 game.elf: game.o link.ld boot.o utils.o
