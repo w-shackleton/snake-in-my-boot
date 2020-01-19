@@ -23,7 +23,6 @@ getkey:
     retf
 return_popped_key:
     ; int16/ah=10h: Keyboard: Get enhanced stroke
-    xchg bx, bx
     mov ah, 0x10
     int 0x16
     ; Returns character in AL, scan code in AH. Clear top half of ax
@@ -47,7 +46,6 @@ sleep:
 
 draw_cell:
     ; set up stack
-    ; xchg bx, bx - Bochs breakpoint
     pushad
     mov ebp, esp
 
@@ -108,9 +106,4 @@ cls:
     xor ax, ax
     mov es, ax ; reset es segment
     popad
-    retf
-
-
-brk:
-    xchg bx, bx
     retf
